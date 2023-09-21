@@ -117,7 +117,7 @@ void displayHelp() {
         "<mode (generate/validate)>\n\n" \
         "generate mode args: "
         "<key type (oem/retail)> " \
-        "<amount of keys (int)>" \
+        "<amount of keys (int)> " \
         "<randomize chunk B (true/false)> " \
         "<output raw>\n\n" \
         "validate mode args: [raw] <keychain1(<key1>,<key2>)> <keychain2(<key1>,<key2>)>\n" \
