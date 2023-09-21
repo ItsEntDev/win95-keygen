@@ -60,10 +60,10 @@ int main(int argc, char *argv[]) {
             if (!params.raw) {
                 // display info about chosen paramaters
                 std::cout
-                        << "Key info: (keyType=retail,useChunkB="
-                        << params.useChunkB
-                        << ",amount="
+                        << "Key info: (keyType=retail,amount="
                         << params.amount
+                        << ",amount="
+                        << params.useChunkB
                         << ")"
                 << std::endl;
             } /* just using this to make the space look better */
@@ -82,10 +82,10 @@ int main(int argc, char *argv[]) {
             // same thing as retail but it says OEM
             if (!params.raw) {
                 std::cout
-                        << "Key info: (keyType=retail,useChunkB="
-                        << params.useChunkB
-                        << ",amount="
+                        << "Key info: (keyType=retail,amount="
                         << params.amount
+                        << ",useChunkB="
+                        << params.useChunkB
                         << ")"
                         << std::endl;
             }
@@ -117,8 +117,8 @@ void displayHelp() {
         "<mode (generate/validate)>\n\n" \
         "generate mode args: "
         "<key type (oem/retail)> " \
-        "<randomize chunk B (true/false)> " \
         "<amount of keys (int)>" \
+        "<randomize chunk B (true/false)> " \
         "<output raw>\n\n" \
         "validate mode args: [raw] <keychain1(<key1>,<key2>)> <keychain2(<key1>,<key2>)>\n" \
         "SPACES ARE NOT PERMITTED INSIDE A KEYCHAIN\n"
@@ -153,10 +153,13 @@ Paramaters getParams(int argc, char *argv[]) {
                 // it checks for it being 'false' or '0'
                 // because I personally kept forgetting
                 // you had to write false and not 0
-                if (std::strcmp(argv[3], "false") == 0 ||
-                    std::strcmp(argv[3], "0") == 0) { paramaters.useChunkB = false; }
+                // amount param
+                paramaters.amount = std::stoi(argv[3]);
+
                 if (argc > 4) {
-                    paramaters.amount = std::stoi(argv[4]);
+                    // useChunkB param
+                    if (std::strcmp(argv[3], "false") == 0 ||
+                        std::strcmp(argv[3], "0") == 0) { paramaters.useChunkB = false; }
                     if (argc > 5) {
                         // param raw is for writing to files
                         if (std::strcmp(argv[5], "true") == 0 || std::strcmp(argv[5], "1") == 0) {
