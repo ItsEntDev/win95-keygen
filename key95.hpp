@@ -76,7 +76,7 @@ std::string generateKey(KeyType keyType);
 std::string generateKey();
 
 // gets type of key from a key
-KeyType getKeyType(std::string key);
+KeyType getKeyType(const std::string& key);
 // validates with a passed key type
 bool validateKey(KeyType keyType, const std::string& key);
 // autodetects key type

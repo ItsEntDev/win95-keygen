@@ -332,13 +332,24 @@ std::string generateKey() {
     return RetailKey::generate();
 }
 
-KeyType getKeyType(std::string key) {
-    // check key lengths to auto-select type
+KeyType getKeyType(const std::string& key) {
+    KeyType keyType = KeyType::NONE;
+    // check key lengths for first layer
     switch (key.length()) {
-        case 11: { return KeyType::RETAIL; }
-        case 23: { return KeyType::OEM; }
-        default: { return KeyType::NONE; /* somehow */ }
-    }
+        case 11: {
+            keyType = KeyType::RETAIL;
+            // second layer checks
+            std::regex retailFormat("^([0-9]{3})-([0-9]{7})$");
+            if (!std::regex_match(key, retailFormat)) { keyType = KeyType::NONE; }
+            break;
+        } case 23: {
+            keyType = KeyType::OEM;
+            // second layer checks
+            std::regex oemFormat("^(0[0-9][0-9]|1[0-9][0-9]|2[0-9][0-9]|3[0-6][0-6])(9[5-9]|0[0-3])-OEM-0([0-9]{6})-([0-9]{5})$");
+            if (!std::regex_match(key, oemFormat)) { keyType = KeyType::NONE; }
+            break;
+        } default: { keyType = KeyType::NONE; /* unknown key type */ break; }
+    } return keyType;
 }
 
 /*
@@ -357,18 +368,10 @@ bool validateKey(KeyType keyType, const std::string& key) {
 
 // key type autodetection
 bool validateKey(const std::string& key) {
-    KeyType keyType;
-    // check key lengths to auto-select type
-    switch (key.length()) {
-        case 11: { keyType = RETAIL; break; }
-        case 23: { keyType = OEM; break; }
-        default: { return false; /* no key type */ }
-    }
-
     // use relevant validation function
-    switch (keyType) {
+    switch (getKeyType(key)) {
         case RETAIL: { return RetailKey::valid(key); }
         case OEM: { return OEMKey::valid(key); }
-        default: { return false; /* somehow */ }
+        default: { return false; /* unknown key type */ }
     }
 }
