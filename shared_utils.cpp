@@ -4,9 +4,11 @@
 #include <string>
 #include <random>
 #include <chrono>
+#ifdef __linux__
 #include <pwd.h>
 #include <unistd.h>
-#include "shared_utils.h"
+#endif
+#include "shared_utils.hpp"
 
 // Implementation of the function from shared_utils.h
 void clearTerminalAscii() {

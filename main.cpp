@@ -3,8 +3,8 @@
 #include <string>
 #include <cstring>
 #include <vector>
-#include "key95.h"
-#include "shared_utils.h"
+#include "key95.hpp"
+#include "shared_utils.hpp"
 
 #if !defined _WIN32 && !defined __linux__
 #error "Platform is not supported."

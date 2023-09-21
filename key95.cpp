@@ -2,12 +2,12 @@
 // wow there's a lot of stuff here
 #include <iostream>
 #include <regex>
-#include "key95.h"
+#include "key95.hpp"
 // shared utilities library made by me :)
 // it's very specific, please only use the parts you need,
 // just copy+paste, no credit needed.
 // the internet is made on sharing
-#include "shared_utils.h"
+#include "shared_utils.hpp"
 
 // details are pretty simple, loops through the string
 // and casts the chars to numbers then adds them to the total.
