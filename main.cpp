@@ -3,6 +3,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include "cl_args.hpp"
 #include "key95.hpp"
 #include "shared_utils.hpp"
 
@@ -19,17 +20,18 @@ struct Paramaters {
     Mode mode;
     std::vector<std::string> toValidate;
     KeyType keyType;
-    bool useChunkB;
+    bool constantChunkB;
     int amount;
     bool raw;
 };
 
 void displayHelp();
-Paramaters getParams(int argc, char *argv[]);
+Paramaters getParams(CLArgs::Parser *parser);
 void validateFrontendPrint(const std::string& key);
 
 // Globals
 Paramaters params{};
+const std::string version = "2.0.1";
 
 // Product Key Generator CLI for Windows and Linux
 // by ItsEntDev @ 20th Sep 2023
@@ -39,7 +41,9 @@ Paramaters params{};
 // Retail key format: xxx-NNNNNNN
 int main(int argc, char *argv[]) {
     // get paramaters from command-line args
-    params = getParams(argc, argv);
+    CLArgs::Parser parser(argc, argv);
+    params = getParams(&parser);
+
     /*
      * a little note on params.raw
      * params.raw is for when you want
@@ -51,26 +55,28 @@ int main(int argc, char *argv[]) {
     if (params.mode == VALIDATE) {
         for (const std::string& key : params.toValidate) { validateFrontendPrint(key); }
         exit(0);
-    }
-
+    } std::cout << std::boolalpha;
     // switch statement for the paramaters
     switch (params.keyType) {
         // generate retail key
         case RETAIL: {
+
             if (!params.raw) {
                 // display info about chosen paramaters
                 std::cout
-                        << "Key info: (keyType=retail,amount="
+                        << "Key info: (key type: retail, amount: "
                         << params.amount
-                        << ",amount="
-                        << params.useChunkB
+                        << ", constantChunkB: "
+                        << params.constantChunkB
                         << ")"
                 << std::endl;
             } /* just using this to make the space look better */
             // use the RetailKey::generate() method overload, which is just a wrapper around having to use a bunch
             // of chunk methods. it wasn't hard to write so I did it. you can also just call generateKey from
             // key95's global namespace which has three different overloads for ease of use
-            for (int i = 0; i < params.amount; ++i) { std::cout << RetailKey::generate(params.useChunkB) << std::endl; }
+            for (int i = 0; i < params.amount; ++i) {
+                std::cout << RetailKey::generate(params.constantChunkB) << std::endl;
+            } // params.raw check
             if (!params.raw) {
                 // inform that keygen is finished
                 std::cout << "Key generation finished." << std::endl;
@@ -82,16 +88,17 @@ int main(int argc, char *argv[]) {
             // same thing as retail but it says OEM
             if (!params.raw) {
                 std::cout
-                        << "Key info: (keyType=retail,amount="
+                        << "Key info: (key type: retail, amount: "
                         << params.amount
-                        << ",useChunkB="
-                        << params.useChunkB
+                        << ", constantChunkB: "
+                        << params.constantChunkB
                         << ")"
                         << std::endl;
             }
             // read retail's comments
-            for (int i = 0; i < params.amount; ++i) { std::cout << OEMKey::generate(params.useChunkB) << std::endl; }
-            // params.raw check
+            for (int i = 0; i < params.amount; ++i) {
+                std::cout << OEMKey::generate(params.constantChunkB) << std::endl;
+            } // params.raw check
             if (!params.raw) {
                 // inform that keygen is finished
                 std::cout << "Key generation finished." << std::endl;
@@ -114,74 +121,57 @@ void displayHelp() {
     // it's just std::cout
     std::cout << "Command line arguments available:\n" << std::endl;
     std::cout <<
-        "<mode (generate/validate)>\n\n" \
-        "generate mode args: "
-        "<key type (oem/retail)> " \
-        "<amount of keys (int)> " \
-        "<randomize chunk B (true/false)> " \
-        "<output raw>\n\n" \
-        "validate mode args: [raw] <keychain1(<key1>,<key2>)> <keychain2(<key1>,<key2>)>\n" \
-        "SPACES ARE NOT PERMITTED INSIDE A KEYCHAIN\n"
+        "--version/-V\n" <<
+        "--help/-H\n" <<
+        "--mode/-M generate/validate\n" <<
+        "--output-raw/-R\n" <<
+        "(VALIDATE MODE ONLY):\n" <<
+        "   --keys/-L key1,key2,key3\n" <<
+        "(GENERATE MODE ONLY):\n" <<
+        "   --key-type/-K retail/oem\n" <<
+        "   --amount/-A number\n" <<
+        "   --constant-chunk-b/-B\n" <<
+        "   --output-raw/-R\n"
     << std::endl;
+    std::cout << "Arguments can be in any order. --help and --version override everything else." << std::endl;
+    std::cout << "Argument names are CAsE SeNSitIVE but values are not. (Except keys)" << std::endl;
     std::cout << "If arguments are not supplied, defaults will be used." << std::endl;
-    std::cout << "Arguments MUST be in the correct order, or will be ignored." << std::endl;
     exit(0);
 }
 
 // gets paramaters to choose right option series
-Paramaters getParams(int argc, char *argv[]) {
+Paramaters getParams(CLArgs::Parser *parser) {
     Paramaters paramaters{
         Mode::GENERATE,
         {},
         KeyType::RETAIL,
-        true,
+        false,
         1,
         false
     }; // paramater create
-    if (argc > 1) {
-        // display help menu
-        if (std::strcmp(argv[1], "help") == 0) { displayHelp(); }
-        // check mode
-        if (std::strcmp(argv[1], "generate") == 0) { paramaters.mode = Mode::GENERATE; }
-        if (std::strcmp(argv[1], "validate") == 0) { paramaters.mode = Mode::VALIDATE; }
-        // go into very badly designed argument checks for generate
-        if (argc > 2 && paramaters.mode == GENERATE) {
-            if (std::strcmp(argv[2], "retail") == 0) { paramaters.keyType = KeyType::RETAIL; }
-            else if (std::strcmp(argv[2], "oem") == 0) { paramaters.keyType = KeyType::OEM; }
-            if (argc > 3) {
-                // nested ifs cause its easy
-                // it checks for it being 'false' or '0'
-                // because I personally kept forgetting
-                // you had to write false and not 0
-                // amount param
-                paramaters.amount = std::stoi(argv[3]);
+    // completely removed for revamp using cl_args
+    CLArgs::Argument helpArg = parser->argument("help", "H");
+    CLArgs::Argument versionArg = parser->argument("version", "V");
+    CLArgs::Argument modeArg = parser->argument("mode", "M");
+    CLArgs::Argument outputRawArg = parser->argument("output-raw", "R");
+    CLArgs::Argument gKeyTypeArg = parser->argument("key-type", "K");
+    CLArgs::Argument gAmountArg = parser->argument("amount", "A");
+    CLArgs::Argument gChunkBArg = parser->argument("constant-chunk-b", "B");
+    CLArgs::Argument vKeylistArg = parser->argument("keys", "L");
 
-                if (argc > 4) {
-                    // useChunkB param
-                    if (std::strcmp(argv[3], "false") == 0 ||
-                        std::strcmp(argv[3], "0") == 0) { paramaters.useChunkB = false; }
-                    if (argc > 5) {
-                        // param raw is for writing to files
-                        if (std::strcmp(argv[5], "true") == 0 || std::strcmp(argv[5], "1") == 0) {
-                            paramaters.raw = true;
-                        }
-                    }
-                }
-            }
-        } else if (argc > 2 && paramaters.mode == VALIDATE) {
-            // parse validation keys
-            // passing key format
-            // keychain: multiple keys, any type, no spaces, seperated by commas <key1>,<key2>,<key3>
-            // args: multiple chains, seperated by spaces <keychain1> <keychain 2> <keychain 3>
-            int offset = 2;
-            if (std::strcmp(argv[2], "raw") == 0) { paramaters.raw = true; offset = 3; }
-            for (int i = 0; i < argc - offset; ++i) {
-                std::vector<std::string> keyChain = split_string(argv[i + offset], ",");
-                for (const std::string& key : keyChain) { paramaters.toValidate.push_back(key); }
-            }
-        } else {
-            displayHelp();
-        }
+    if (helpArg.present) { displayHelp(); }
+    if (versionArg.present) {
+        std::cout << "ent's windows 95 key generator - version " << version << std::endl; exit(0);
+    } if (modeArg.present && !modeArg.empty) {
+        if (asLowercase(modeArg.value) == "validate") { paramaters.mode = Mode::VALIDATE; }
+    } if (outputRawArg.present) { paramaters.raw = true; }
+    if (gKeyTypeArg.present && !gKeyTypeArg.empty) {
+        if (asLowercase(gKeyTypeArg.value) == "oem") { paramaters.keyType = KeyType::OEM; }
+    } if (gAmountArg.present && !gAmountArg.empty) { paramaters.amount = std::stoi(gAmountArg.value); }
+    if (gChunkBArg.present) { paramaters.constantChunkB = true; }
+    if (vKeylistArg.present && !vKeylistArg.empty) {
+        std::vector<std::string> keylist = split_string(vKeylistArg.value, ",");
+        for (const std::string& key : keylist) { paramaters.toValidate.push_back(key); }
     } return paramaters;
 }
 
