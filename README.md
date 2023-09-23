@@ -31,8 +31,10 @@ win95-keygen's frontend uses a header called 'cl_args.hpp'. It's very simple and
   --help/-H
   --mode/-M generate/validate
   --output-raw/-R
+  
 (VALIDATE MODE ONLY):
   --keys/-L key1,key2,key3
+  
 (GENERATE MODE ONLY):
   --key-type/-K retail/oem
   --amount/-A number
