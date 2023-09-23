@@ -141,25 +141,23 @@ std::string OEMKey::generate() {
  * the second chunk or not. if you don't,
  * an always-valid chunk is used instead.
  */
-std::string OEMKey::generate(bool useChunkB) {
+std::string OEMKey::generate(bool constantChunkB) {
     std::string result;
-    if (useChunkB) {
-        // same process as above
-        result += chunkA();
-        result += "-OEM-";
-        result += chunkB();
-        result += "-";
-        result += chunkC();
-    } else {
+    if (constantChunkB) {
         // same process but instead
         // of chunk B it uses '0077777'
         // which always works.
         result += chunkA();
         result += "-OEM-0077777-";
         result += chunkC();
-    }
-
-    return result;
+    } else {
+        // same process as above
+        result += chunkA();
+        result += "-OEM-";
+        result += chunkB();
+        result += "-";
+        result += chunkC();
+    } return result;
 }
 
 // check if an OEM key is valid
@@ -264,18 +262,16 @@ std::string RetailKey::generate() {
  * you to choose if you want to use the algo
  * chunk. if you don't, it works the same way.
  */
-std::string RetailKey::generate(bool useChunkB) {
+std::string RetailKey::generate(bool constantChunkB) {
     std::string result;
-    if (useChunkB) {
+    if (constantChunkB) {
+        result += RetailKey::chunkA();
+        result += "-0077777";
+    } else {
         result += RetailKey::chunkA();
         result += "-";
         result += RetailKey::chunkB();
-    } else {
-        result += RetailKey::chunkA();
-        result += "-0077777";
-    }
-
-    return result;
+    } return result;
 }
 
 bool RetailKey::valid(const std::string& key) {
@@ -300,21 +296,21 @@ bool RetailKey::valid(const std::string& key) {
 
 /*
  * a top-level namespace function.
- * allows you to use paramaters to
+ * allows you to use parameters to
  * change the output instead of namespaces.
 */
-std::string generateKey(KeyType keyType, bool useChunkB) {
+std::string generateKey(KeyType keyType, bool constantChunkB) {
     switch(keyType) {
         case RETAIL:
-            return RetailKey::generate(useChunkB);
+            return RetailKey::generate(constantChunkB);
         case OEM:
-            return OEMKey::generate(useChunkB);
+            return OEMKey::generate(constantChunkB);
         default:
-            return RetailKey::generate(useChunkB);
+            return RetailKey::generate(constantChunkB);
     }
 }
 
-// overload without useChunkB. it will use chunk b by default.
+// overload without constantChunkB. it will use chunk b by default.
 std::string generateKey(KeyType keyType) {
     switch(keyType) {
         case RETAIL:

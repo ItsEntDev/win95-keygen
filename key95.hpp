@@ -67,8 +67,8 @@ namespace RetailKey {
 // a top-level wrapper with overloaded options to
 // generate a key easily. use this if you just want
 // a key from the api, especially if you're in python
-std::string generateKey(KeyType keyType, bool useChunkB);
-// useChunkB will default to
+std::string generateKey(KeyType keyType, bool constantChunkB);
+// constantChunkB will default to
 // (wait a min, i had to check my impl)
 // true so you get a fully random key.
 std::string generateKey(KeyType keyType);
