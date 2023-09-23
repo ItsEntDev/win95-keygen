@@ -9,6 +9,6 @@ if ! command -v cmake >/dev/null 2>&1; then
 fi
 echo Building for "$1"
 cmake -DCMAKE_BUILD_TYPE="$1" -S . -B . -G Ninja
-$GEN
+ninja
 mv ./linux ./win95-keygen
 echo Build finished.
