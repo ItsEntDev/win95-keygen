@@ -6,3 +6,6 @@ CMakeCache.txt
 build.ninja
 win95-keygen
 cmake_install.cmake
+.ninja_deps
+.ninja_log
+.cmake
