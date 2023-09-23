@@ -15,7 +15,7 @@ enum Mode {
     VALIDATE
 };
 
-struct Paramaters {
+struct Parameters {
     Mode mode;
     std::vector<std::string> toValidate;
     KeyType keyType;
@@ -25,11 +25,11 @@ struct Paramaters {
 };
 
 void displayHelp();
-Paramaters getParams(CLArgs::Parser *parser);
+Parameters getParams(CLArgs::Parser *parser);
 void validateFrontendPrint(const std::string& key);
 
 // Globals
-Paramaters params{};
+Parameters params{};
 const std::string version = "2.0.1";
 
 // Product Key Generator CLI for Windows and Linux
@@ -55,13 +55,13 @@ int main(int argc, char *argv[]) {
         for (const std::string& key : params.toValidate) { validateFrontendPrint(key); }
         exit(0);
     } std::cout << std::boolalpha;
-    // switch statement for the paramaters
+    // switch statement for the parameters
     switch (params.keyType) {
         // generate retail key
         case RETAIL: {
 
             if (!params.raw) {
-                // display info about chosen paramaters
+                // display info about chosen parameters
                 std::cout
                         << "Key info: (key type: retail, amount: "
                         << params.amount
@@ -138,16 +138,16 @@ void displayHelp() {
     exit(0);
 }
 
-// gets paramaters to choose right option series
-Paramaters getParams(CLArgs::Parser *parser) {
-    Paramaters paramaters{
+// gets parameters to choose right option series
+Parameters getParams(CLArgs::Parser *parser) {
+    Parameters parameters{
         Mode::GENERATE,
         {},
         KeyType::RETAIL,
         false,
         1,
         false
-    }; // paramater create
+    }; // parameter create
     // completely removed for revamp using cl_args
     CLArgs::Argument helpArg = parser->argument("help", "H");
     CLArgs::Argument versionArg = parser->argument("version", "V");
@@ -162,16 +162,16 @@ Paramaters getParams(CLArgs::Parser *parser) {
     if (versionArg.present) {
         std::cout << "ent's windows 95 key generator - version " << version << std::endl; exit(0);
     } if (modeArg.present && !modeArg.empty) {
-        if (asLowercase(modeArg.value) == "validate") { paramaters.mode = Mode::VALIDATE; }
-    } if (outputRawArg.present) { paramaters.raw = true; }
+        if (asLowercase(modeArg.value) == "validate") { parameters.mode = Mode::VALIDATE; }
+    } if (outputRawArg.present) { parameters.raw = true; }
     if (gKeyTypeArg.present && !gKeyTypeArg.empty) {
-        if (asLowercase(gKeyTypeArg.value) == "oem") { paramaters.keyType = KeyType::OEM; }
-    } if (gAmountArg.present && !gAmountArg.empty) { paramaters.amount = std::stoi(gAmountArg.value); }
-    if (gChunkBArg.present) { paramaters.constantChunkB = true; }
+        if (asLowercase(gKeyTypeArg.value) == "oem") { parameters.keyType = KeyType::OEM; }
+    } if (gAmountArg.present && !gAmountArg.empty) { parameters.amount = std::stoi(gAmountArg.value); }
+    if (gChunkBArg.present) { parameters.constantChunkB = true; }
     if (vKeylistArg.present && !vKeylistArg.empty) {
         std::vector<std::string> keylist = split_string(vKeylistArg.value, ",");
-        for (const std::string& key : keylist) { paramaters.toValidate.push_back(key); }
-    } return paramaters;
+        for (const std::string& key : keylist) { parameters.toValidate.push_back(key); }
+    } return parameters;
 }
 
 void validateFrontendPrint(const std::string& key) {
