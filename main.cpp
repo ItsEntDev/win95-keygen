@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
                 std::cout
                         << "Key info: (key type: retail, amount: "
                         << params.amount
-                        << ", constantChunkB: "
+                        << ", constant chunk b: "
                         << params.constantChunkB
                         << ")"
                 << std::endl;
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
                 std::cout
                         << "Key info: (key type: retail, amount: "
                         << params.amount
-                        << ", constantChunkB: "
+                        << ", constant chunk b: "
                         << params.constantChunkB
                         << ")"
                         << std::endl;
