@@ -24,25 +24,37 @@ Yes. It's open-source for a reason.
 It isn't much, just a library for all the Win95 product-key related stuff.
 
 ## Usage Docs
-### win95-keygen <mode (generate/validate)>
+win95-keygen's frontend uses a header called 'cl_args.hpp'. It's very simple and basic. Usage docs: Read the code.
+### Command-line arguments
+(MODE INDEPENDENT):
+  --version/-V
+  --help/-H
+  --mode/-M generate/validate
+  --output-raw/-R
+(VALIDATE MODE ONLY):
+  --keys/-L key1,key2,key3
+(GENERATE MODE ONLY):
+  --key-type/-K retail/oem
+  --amount/-A number
+  --constant-chunk-b/-B
+  --output-raw/-R
 
-### arguments for generate mode:
-win95-keygen generate <key type (retail/oem)> <amount (int)> <use chunk b (true/false 1/0)> <output raw (true/false 1/0)>
+Arguments can be in any order. --help and --version override everything else.
+Argument names are CAsE SeNSitIVE but values are not. (Except keys)
+If arguments are not supplied, defaults will be used.
 
-### arguments for validate mode:
-win95-keygen validate <OPTIONAL <output raw (true/false 1/0)>> <keychain1 (key1,key2,key3)> <keychain2 (key1,key2,key3)> etc...
-
-### what do the arguments mean?
+### What do the arguments mean?
 mode: whether to generate keys or check them.
 mode generate sub-arguments:
   - key type is if the CLI should generate Retail keys or OEM keys.
   - amount is an integer representing how many keys it should output.
-  - use chunk b is whether the n % 7 randomiser should be used or if it should use an always-valid (0077777). setting false/0 may make it generate faster.
-  - output raw is if it should give you some info on selected options and tell you when it's done, or just print the keys. useful for writing to a file
+  - constant chunk b is whether the n % 7 randomiser should be used or if it should use an always-valid (0077777). by default it will be random, but you can make it constant by passing this flag.
+  - output raw is if it should give you some info on selected options and tell you when it's done, or just print the keys. useful for writing to a file.
 
 mode validate sub-arguments:
-  - OPTIONAL output raw is the same thing, but optional. if not given it is set to false.
-  - a list of space-delimited keychains, which are each a list of comma-seperated keys. order is what order they will be checked in.
+  - a list of comma-seperated keys. order is what order they will be checked in.
 
-Arguments MUST be passed in order, but you do not have to pass all of them.
-IE: `win95-keygen generate retail 10` (win95-keygen mode key-type amount use-chunk-b=default output-raw=default) is ok but `win95-keygen generate 10 true retail` (win95-keygen mode amount use-chunk-b key-type) is not.
+## Will this be updated?
+If there are any features I feel I really need to add... maybe.
+But I probably won't. So, yeah. I'll try and get a windows build,
+but MingW64 doesn't work on my machine. (headers are missing)
