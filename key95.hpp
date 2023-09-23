@@ -8,9 +8,9 @@
 
 // enum for the type of key. just a wrapper over 0 or 1
 enum KeyType {
+    NONE,
     RETAIL,
-    OEM,
-    NONE
+    OEM
 };
 
 // common functionality between both types of keys

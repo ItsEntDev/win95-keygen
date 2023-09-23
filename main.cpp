@@ -1,7 +1,6 @@
 // ItsEntDev @ 20/09/23
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <vector>
 #include "cl_args.hpp"
 #include "key95.hpp"
@@ -40,7 +39,7 @@ const std::string version = "2.0.1";
 // OEM key format: xxxyy-OEM-00NNNNN-zzz
 // Retail key format: xxx-NNNNNNN
 int main(int argc, char *argv[]) {
-    // get paramaters from command-line args
+    // get parameters from command-line args
     CLArgs::Parser parser(argc, argv);
     params = getParams(&parser);
 

@@ -1,5 +1,4 @@
 // ItsEntDev @ 19/08/23
-
 #include <iostream>
 #include <string>
 #include <random>
@@ -43,7 +42,7 @@ std::string asUppercase(const std::string& str) {
     return uppercaseStr;
 }
 
-std::vector<std::string> split_string(std::string string, std::string delimiter) {
+std::vector<std::string> split_string(const std::string& string, const std::string& delimiter) {
     // define local variables
     // working start of the string,
     // working end of the string,

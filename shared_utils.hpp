@@ -17,7 +17,7 @@ std::string asLowercase(const std::string& str);
 // Returns a string of the uppercase version of the passed string reference
 std::string asUppercase(const std::string& str);
 // Returns a vector of split strings with delimiters removed
-std::vector<std::string> split_string(std::string str, std::string delimiter);
+std::vector<std::string> split_string(const std::string& str, const std::string& delimiter);
 
 //
 template <typename T, size_t rows, size_t cols>
