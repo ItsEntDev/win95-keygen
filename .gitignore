@@ -2,3 +2,7 @@
 cmake-build-debug
 cmake-build-release
 CMakeFiles
+CMakeCache.txt
+build.ninja
+win95-keygen
+cmake_install.cmake
