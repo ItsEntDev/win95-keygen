@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
             // same thing as retail but it says OEM
             if (!params.raw) {
                 std::cout
-                        << "Key info: (key type: retail, amount: "
+                        << "Key info: (key type: OEM, amount: "
                         << params.amount
                         << ", constant chunk b: "
                         << params.constantChunkB

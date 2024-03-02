@@ -16,28 +16,28 @@ bool Common95::sumDivsBy7(const std::string& chunk) {
     // default result is false
     bool result = false;
     // declare sum
-    ulong sum = 0;
-    // loop through, converting char to ulong. i love single-line statements
-    for (char ele : chunk) { sum += static_cast<ulong>(ele - '0'); }
+    uint64_t sum = 0;
+    // loop through, converting char to uint64_t. i love single-line statements
+    for (char ele : chunk) { sum += static_cast<uint64_t>(ele - '0'); }
     // if n mod d is zero, number n is divisible by d
     // source: maths lessons
     if (sum % 7 == 0) { result = true; }
     return result;
 }
 
-std::string Common95::genAlgorithmChunk(ulong length) noexcept {
+std::string Common95::genAlgorithmChunk(uint64_t length) noexcept {
     // Check if length is zero
     if (length == 0) { return ""; }
     // grtWithEnd creates a filled RangeTable but the final entry will be emin and emax.
     RangeTable rangeTable = grtWithEnd(length, 0, 9, 1, 7);
     // declare vector result
-    std::vector<ulong> result;
+    std::vector<uint64_t> result;
     //int loopCounter = 0;
     // Generate random numbers until one is divisible by 7
     while (true/*loopCounter < 65535*/) {
         // loopCounter was used when I was testing performance and debugging.
         //++loopCounter;
-        // uses the above defined range table to generate a vector of ulongs.
+        // uses the above defined range table to generate a vector of uint64_ts.
         result = randomLenNums(length, rangeTable);
         // check if the vector qualifies by compressing to string and if it is valid
         // call compressToS (compress to string) and return that new string.
@@ -55,7 +55,7 @@ std::string Common95::genAlgorithmChunk(ulong length) noexcept {
  */
 std::string OEMKey::chunkA() {
     // create an empty vector and a result string
-    std::vector<ulong> data = {};
+    std::vector<uint64_t> data = {};
     std::string result;
     // define a custom range table for the day randomiser
     // the valid range of days is 000-366
@@ -66,13 +66,13 @@ std::string OEMKey::chunkA() {
             {0, 3},
             {0, 6},
             {0, 6}
-    }; std::vector<ulong> vec = randomLenNums(3, rangeTable); // use the table to fill a temporary vector
+    }; std::vector<uint64_t> vec = randomLenNums(3, rangeTable); // use the table to fill a temporary vector
     // compress the temporary vector to a string
     result += compressToS(vec);
     // create a temporary string and have it at 9 by default
     std::string toAdd = "9"; // 9 represents the 199Xs
     // create a single Pair that represents a range
-    Pair<ulong, ulong> range{5, 9}; // year range between 5 and 9 (1995-1999)
+    Pair<uint64_t, uint64_t> range{5, 9}; // year range between 5 and 9 (1995-1999)
     // do a true-false random to change the millenium of the year
     if (psuedoSecureULong(0, 1) == 1) {
         // set decade to 0 (200X)
@@ -113,7 +113,7 @@ std::string OEMKey::chunkB() {
  */
 std::string OEMKey::chunkC() {
     // get random numbers, compress them, and return
-    std::vector<ulong> vec = randomLenNums(5);
+    std::vector<uint64_t> vec = randomLenNums(5);
     std::string result = compressToS(vec);
     return result;
 }
@@ -206,7 +206,7 @@ bool RetailKey::chunkAIsInvalid(std::string& chunk) {
     if (chunk.at(0) == '0' || chunk.at(0) == '1' || chunk.at(0) == '2') { return false; }
     // if the first digit isn't 0, 1 or 2 make sure it isn't the same digit repeated 3 times,
     // because for some reason being 333, 444, 555, 666, 777, 888 or 999 invalidates the chunk.
-    for (ulong i = 0; i < 3; ++i) { if (chunk.at(i) != chunk.at(0)) { return false; } }
+    for (uint64_t i = 0; i < 3; ++i) { if (chunk.at(i) != chunk.at(0)) { return false; } }
     // return invalid if it wasn't returned as false at any other point but was the right size.
     return true;
 }
@@ -218,7 +218,7 @@ bool RetailKey::chunkAIsInvalid(std::string& chunk) {
  */
 std::string RetailKey::chunkA() {
     // create vector and string
-    std::vector<ulong> vec;
+    std::vector<uint64_t> vec;
     std::string compressed;
     // do-while the chunk is invalid
     do {

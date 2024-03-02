@@ -47,7 +47,7 @@ std::vector<std::string> split_string(const std::string& string, const std::stri
     // working start of the string,
     // working end of the string,
     // length of the delimiter
-    ulong start = 0, end, len = delimiter.length();
+    uint64_t start = 0, end, len = delimiter.length();
     // working token and finished result
     std::string token;
     std::vector<std::string> result;
@@ -88,7 +88,7 @@ T copy2dArray(const T array[rows][cols]) {
     } return copy;
 }
 
-ulong psuedoSecureULong(ulong min, ulong max) {
+uint64_t psuedoSecureULong(uint64_t min, uint64_t max) {
 
     std::random_device dev;
     std::mt19937::result_type seed = dev() ^ (
@@ -105,44 +105,44 @@ ulong psuedoSecureULong(ulong min, ulong max) {
                             std::chrono::high_resolution_clock::now().time_since_epoch())
                     .count());
     std::mt19937 rng(seed);
-    std::uniform_int_distribution<std::mt19937::result_type> rnd(min, max); // distribution in range [<, >]
+    std::uniform_int_distribution<uint64_t> rnd(min, max); // distribution in range [<, >]
 
     return rnd(rng);
 }
 
-std::vector<Pair<ulong, ulong>> paddedRangeTable(std::vector<Pair<ulong, ulong>> &vec, ulong pad) {
-    std::vector<Pair<ulong, ulong>> paddedVec = vec;
-    for (ulong i = 0; i < pad; ++i) { paddedVec.push_back(vec.back()); }
+std::vector<Pair<uint64_t, uint64_t>> paddedRangeTable(std::vector<Pair<uint64_t, uint64_t>> &vec, uint64_t pad) {
+    std::vector<Pair<uint64_t, uint64_t>> paddedVec = vec;
+    for (uint64_t i = 0; i < pad; ++i) { paddedVec.push_back(vec.back()); }
     return paddedVec;
 }
 
-std::vector<ulong> randomLenNums(ulong length, std::vector<Pair<ulong, ulong>> &rangeTable) {
-    std::vector<ulong> result;
-    std::vector<Pair<ulong, ulong>> localTable;
+std::vector<uint64_t> randomLenNums(uint64_t length, std::vector<Pair<uint64_t, uint64_t>> &rangeTable) {
+    std::vector<uint64_t> result;
+    std::vector<Pair<uint64_t, uint64_t>> localTable;
     if (length > rangeTable.size()) { localTable = paddedRangeTable(rangeTable, length - rangeTable.size()); }
     else { localTable = rangeTable; }
-    for (ulong i = 0; i < length; ++i) {
+    for (uint64_t i = 0; i < length; ++i) {
         result.push_back(psuedoSecureULong(localTable.at(i).a, localTable.at(i).b));
     } return result;
 }
 
-std::vector<ulong> randomLenNums(ulong length, ulong rangeMin, ulong rangeMax) {
-    std::vector<ulong> result;
-    for (ulong i = 0; i < length; ++i) {
+std::vector<uint64_t> randomLenNums(uint64_t length, uint64_t rangeMin, uint64_t rangeMax) {
+    std::vector<uint64_t> result;
+    for (uint64_t i = 0; i < length; ++i) {
         result.push_back(psuedoSecureULong(rangeMin, rangeMax));
     } return result;
 }
 
-std::vector<ulong> randomLenNums(ulong length) {
-    std::vector<ulong> result;
-    for (ulong i = 0; i < length; ++i) {
+std::vector<uint64_t> randomLenNums(uint64_t length) {
+    std::vector<uint64_t> result;
+    for (uint64_t i = 0; i < length; ++i) {
         result.push_back(psuedoSecureULong(0, 9));
     } return result;
 }
 
-std::vector<Pair<ulong, ulong>> genericRangeTable(ulong listLength, ulong rangeMin, ulong rangeMax) {
-    std::vector<Pair<ulong, ulong>> rangeList;
-    for (ulong i = 0; i < listLength; ++i) { rangeList.push_back({rangeMin, rangeMax}); }
+std::vector<Pair<uint64_t, uint64_t>> genericRangeTable(uint64_t listLength, uint64_t rangeMin, uint64_t rangeMax) {
+    std::vector<Pair<uint64_t, uint64_t>> rangeList;
+    for (uint64_t i = 0; i < listLength; ++i) { rangeList.push_back({rangeMin, rangeMax}); }
     return rangeList;
 }
 
@@ -152,20 +152,20 @@ std::string compressToS(std::vector<int>& vec) {
     return working;
 }
 
-std::string compressToS(std::vector<ulong>& vec) {
+std::string compressToS(std::vector<uint64_t>& vec) {
     std::string working;
-    for (ulong num : vec) { working += std::to_string(num); }
+    for (uint64_t num : vec) { working += std::to_string(num); }
     return working;
 }
 
-ulong compressToUl(std::vector<ulong>& vec) {
+uint64_t compressToUl(std::vector<uint64_t>& vec) {
     std::string inProgress = compressToS(vec);
     return std::stoul(inProgress);
 }
 
-std::vector<Pair<ulong, ulong>> grtWithEnd(ulong llen, ulong lmin, ulong lmax, ulong emin, ulong emax) {
-    if (llen <= 0) { return std::vector<Pair<ulong, ulong>>{}; };
-    std::vector<Pair<ulong, ulong>> result = genericRangeTable(llen - 1, lmin, lmax);
+std::vector<Pair<uint64_t, uint64_t>> grtWithEnd(uint64_t llen, uint64_t lmin, uint64_t lmax, uint64_t emin, uint64_t emax) {
+    if (llen <= 0) { return std::vector<Pair<uint64_t, uint64_t>>{}; };
+    std::vector<Pair<uint64_t, uint64_t>> result = genericRangeTable(llen - 1, lmin, lmax);
     result.push_back({emin, emax});
     return result;
 }

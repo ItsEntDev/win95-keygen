@@ -1,9 +1,10 @@
 // ItsEntDev @ 22/09/23
-#include <string>
-#include <vector>
-
 #ifndef LEARNCPP_CL_ARGS_HPP
 #define LEARNCPP_CL_ARGS_HPP
+
+#include <cstdint>
+#include <string>
+#include <vector>
 
 namespace CLArgs {
     using ArgListType = std::vector<std::string>;

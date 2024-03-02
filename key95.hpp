@@ -20,7 +20,7 @@ namespace Common95 {
     // generate the chunk of both keys that involves
     // numbers divisible by seven. as well as that,
     // the ending number must be (n > 0 && n < 8)
-    std::string genAlgorithmChunk(ulong length) noexcept;
+    std::string genAlgorithmChunk(uint64_t length) noexcept;
 }
 
 // the chunk? notation represents

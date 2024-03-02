@@ -6,7 +6,7 @@ CLArgs::Parser::Parser(int argc, char **argv) {
     std::string currentArg;
     std::string nextArg;
     bool skip = false;
-    for (ulong i = 0; i < this->args.size(); ++i) {
+    for (uint64_t i = 0; i < this->args.size(); ++i) {
         currentArg = this->args.at(i);
         if (i + 1 < this->args.size()) { nextArg = this->args.at(i + 1); } else { nextArg = "-"; }
         // continue filling argsString
