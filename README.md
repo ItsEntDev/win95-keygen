@@ -1,30 +1,27 @@
 # win95-keygen - A Windows 95 key generation/validation CLI
 win95-keygen is a CLI tool for generating and checking validity of Windows 95 product keys, both OEM and Retail.
-Well, really, it's a frontend to key95.h.
 
 ## IFAQ
 
 ### Why Windows 95?
 Because I made this project while I was 2 weeks into learning C++, and the algorithm
-was *relatively* easy to implement. It also taught me about regex and vectors.
+was *relatively* easy to implement. I also learnt about C++ regex.
 
 ### Is it the best one?
 Almost certainly no. I'm not a great dev, and there is loads of bloat in shared_utils.h.
 Most of the functions in there are redundant and unneeded.
 
 ### Can I contribute?
-Sure. If you addition 1) is useful 2) builds on both platforms and functions correctly
-I'll accept a PR.
+There's no real need to.
 
 ### Can I make issues?
-Yes, but I am quite unlikely to fix them. I'm just a hobby dev interested in retro stuff.
+Yes, but I am quite unlikely to fix them.
 
-### Can I use key95?
-Yes. It's open-source for a reason.
-It isn't much, just a library for all the Win95 product-key related stuff.
+### Can I use key95.h
+Sure, it's not complicated. Just some simple arguments.
 
 ## Usage Docs
-win95-keygen's frontend uses a header called 'cl_args.hpp'. It's very simple and basic. Usage docs: Read the code.
+win95-keygen's frontend uses a header called 'cl_args.hpp'. It's very simple and basic. Usage docs: Just read the source.
 ### Command-line arguments
 (MODE INDEPENDENT):
   --version/-V
@@ -58,5 +55,4 @@ mode validate sub-arguments:
 
 ## Will this be updated?
 If there are any features I feel I really need to add... maybe.
-But I probably won't. So, yeah. I'll try and get a windows build,
-but MingW64 doesn't work on my machine. (headers are missing)
+But I probably won't.
